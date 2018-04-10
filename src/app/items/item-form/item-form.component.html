@@ -3,9 +3,14 @@
 <label class="label">Name: </label>
 
 <input placeholder="Item Title" class="input"
-[(ngModel)]="item.title"
-required minlength="2" 
-#title='ngModel' autofocus>
+  [(ngModel)]="item.title"
+  required minlength="2" 
+  #title='ngModel' autofocus>
+
+<input placeholder="Item Priority" class="input"
+  [(ngModel)]="item.priority"
+  required minlength="2">
+  
 
 <div *ngIf="title.dirty">
   <span *ngIf='title.errors; then errors else valid'>template renders here...</span>
