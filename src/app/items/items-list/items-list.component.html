@@ -2,6 +2,8 @@
 
 <p>This page is a demo of a very basic todo list in Angular, using the Firebase Realtime DB on the backend.</p>
 
+<h2>Version 2: IP: {{ip}}</h2>
+
 <div *ngFor="let item of items | async" class="card">
   <item-detail [item]='item'></item-detail>
 </div>

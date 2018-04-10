@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -19,6 +20,7 @@ import { ItemDetailComponent } from '../item-detail/item-detail.component';
     ReactiveFormsModule,
     FormsModule,
     AngularFireDatabaseModule,
+    HttpClientModule,
   ],
   declarations: [
     ItemsListComponent,
