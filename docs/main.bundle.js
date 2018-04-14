@@ -630,7 +630,7 @@ var ItemFormComponent = (function () {
 /***/ "../../../../../src/app/items/items-list/items-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>Items</h1>\n\n<p>This page is a demo of a very basic todo list in Angular, using the Firebase Realtime DB on the backend.</p>\n\n<h2>Version 2: IP: {{ip}}</h2>\n\n<div *ngFor=\"let item of items | async\" class=\"card\">\n  <item-detail [item]='item'></item-detail>\n</div>\n\n<loading-spinner *ngIf=\"showSpinner\"></loading-spinner>\n\n<button type=\"button\" class=\"button is-danger\" (click)='deleteItems()'>Delete Entire List</button>\n\n<hr>\n\n<item-form></item-form>\n"
+module.exports = "<h1>Items</h1>\n\n<p>This page is a demo of a very basic todo list in Angular, using the Firebase Realtime DB on the backend.</p>\n\n<h2>Version 2: IP: {{client_ip}}</h2>\n\n<div *ngFor=\"let item of items | async\" class=\"card\">\n  <item-detail [item]='item'></item-detail>\n</div>\n\n<loading-spinner *ngIf=\"showSpinner\"></loading-spinner>\n\n<button type=\"button\" class=\"button is-danger\" (click)='deleteItems()'>Delete Entire List</button>\n\n<hr>\n\n<item-form></item-form>\n"
 
 /***/ }),
 
@@ -677,7 +677,7 @@ var ItemsListComponent = (function () {
         this.itemService = itemService;
         this.http = http;
         this.showSpinner = true;
-        this.ip = '';
+        this.client_ip = '';
         this.items = this.itemService.getItemsList();
     }
     ItemsListComponent.prototype.ngOnInit = function () {
@@ -685,14 +685,9 @@ var ItemsListComponent = (function () {
         this.items.subscribe(function (x) {
             _this.showSpinner = false;
         });
-        var url = "https://api.ipify.org/?format=json";
-        this.http.get(url)
+        this.http.get("https://api.ipify.org/?format=json")
             .subscribe(function (data) {
-            console.log('EYE CATCHER!!!');
-            console.log(data);
-            /* tslint:disable */ // Disable all rules for the rest of the file
-            _this.ip = data['ip'];
-            /* tslint:enable */ // Enable all rules for the rest of the file0
+            _this.client_ip = data['ip'];
         });
     };
     ItemsListComponent.prototype.deleteItems = function () {

@@ -13,7 +13,7 @@ export class ItemsListComponent implements OnInit {
 
   items: Observable<Item[]>;
   showSpinner = true;
-  ip = '';
+  client_ip = '';
 
   constructor(private itemService: ItemService, private http: HttpClient) {
     this.items = this.itemService.getItemsList();
@@ -23,14 +23,9 @@ export class ItemsListComponent implements OnInit {
     this.items.subscribe((x) => {
       this.showSpinner = false;
     });
-    const url = `https://api.ipify.org/?format=json`;
-    this.http.get<IpResponse>(url)
+    this.http.get<IpResponse>(`https://api.ipify.org/?format=json`)
         .subscribe((data) => {
-         console.log('EYE CATCHER!!!');
-         console.log(data);
-         /* tslint:disable */ // Disable all rules for the rest of the file
-         this.ip = data['ip'];
-				 /* tslint:enable */ // Enable all rules for the rest of the file0
+         this.client_ip = data['ip'];
     });
   }
 
