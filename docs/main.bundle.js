@@ -561,7 +561,7 @@ var ItemDetailComponent = (function () {
 /***/ "../../../../../src/app/items/item-form/item-form.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h3>New Task Form</h3>\n\n<label class=\"label\">Name: </label>\n\n<input placeholder=\"Item Title\" class=\"input\"\n[(ngModel)]=\"item.title\"\nrequired minlength=\"2\" \n#title='ngModel' autofocus>\n\n<div *ngIf=\"title.dirty\">\n  <span *ngIf='title.errors; then errors else valid'>template renders here...</span>\n</div>\n\n<button class=\"button is-primary\" (click)='createItem()' [disabled]=\"!title.valid\">Create</button>\n\n<ng-template #valid>\n  <p class=\"help is-success\">looks good!</p>\n</ng-template>\n\n<ng-template #errors>\n  <p class=\"help is-danger\">form contains errors!</p>\n</ng-template>\n"
+module.exports = "<h3>New Task Form</h3>\n\n<label class=\"label\">Name: </label>\n\n<input placeholder=\"Item Title\" class=\"input\"\n  [(ngModel)]=\"item.title\"\n  required minlength=\"2\" \n  #title='ngModel' autofocus>\n\n<input placeholder=\"Item Priority\" class=\"input\"\n  [(ngModel)]=\"item.priority\"\n  required minlength=\"2\">\n  \n\n<div *ngIf=\"title.dirty\">\n  <span *ngIf='title.errors; then errors else valid'>template renders here...</span>\n</div>\n\n<button class=\"button is-primary\" (click)='createItem()' [disabled]=\"!title.valid\">Create</button>\n\n<ng-template #valid>\n  <p class=\"help is-success\">looks good!</p>\n</ng-template>\n\n<ng-template #errors>\n  <p class=\"help is-danger\">form contains errors!</p>\n</ng-template>\n"
 
 /***/ }),
 
@@ -630,7 +630,7 @@ var ItemFormComponent = (function () {
 /***/ "../../../../../src/app/items/items-list/items-list.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h1>Items</h1>\n\n<p>This page is a demo of a very basic todo list in Angular, using the Firebase Realtime DB on the backend.</p>\n\n<div *ngFor=\"let item of items | async\" class=\"card\">\n  <item-detail [item]='item'></item-detail>\n</div>\n\n<loading-spinner *ngIf=\"showSpinner\"></loading-spinner>\n\n<button type=\"button\" class=\"button is-danger\" (click)='deleteItems()'>Delete Entire List</button>\n\n<hr>\n\n<item-form></item-form>\n"
+module.exports = "<h1>Items</h1>\n\n<p>This page is a demo of a very basic todo list in Angular, using the Firebase Realtime DB on the backend.</p>\n\n<h2>Version 2: IP: {{ip}}</h2>\n\n<div *ngFor=\"let item of items | async\" class=\"card\">\n  <item-detail [item]='item'></item-detail>\n</div>\n\n<loading-spinner *ngIf=\"showSpinner\"></loading-spinner>\n\n<button type=\"button\" class=\"button is-danger\" (click)='deleteItems()'>Delete Entire List</button>\n\n<hr>\n\n<item-form></item-form>\n"
 
 /***/ }),
 
@@ -658,7 +658,8 @@ module.exports = module.exports.toString();
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ItemsListComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_item_service__ = __webpack_require__("../../../../../src/app/items/shared/item.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared_item_service__ = __webpack_require__("../../../../../src/app/items/shared/item.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -670,16 +671,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
+
 var ItemsListComponent = (function () {
-    function ItemsListComponent(itemService) {
+    function ItemsListComponent(itemService, http) {
         this.itemService = itemService;
+        this.http = http;
         this.showSpinner = true;
+        this.ip = '';
         this.items = this.itemService.getItemsList();
     }
     ItemsListComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.items.subscribe(function (x) {
             _this.showSpinner = false;
+        });
+        var url = "https://api.ipify.org/?format=json";
+        this.http.get(url)
+            .subscribe(function (data) {
+            console.log('EYE CATCHER!!!');
+            console.log(data);
+            /* tslint:disable */ // Disable all rules for the rest of the file
+            _this.ip = data['ip'];
+            /* tslint:enable */ // Enable all rules for the rest of the file0
         });
     };
     ItemsListComponent.prototype.deleteItems = function () {
@@ -691,7 +704,7 @@ var ItemsListComponent = (function () {
             template: __webpack_require__("../../../../../src/app/items/items-list/items-list.component.html"),
             styles: [__webpack_require__("../../../../../src/app/items/items-list/items-list.component.scss")],
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__shared_item_service__["a" /* ItemService */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__shared_item_service__["a" /* ItemService */], __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]])
     ], ItemsListComponent);
     return ItemsListComponent;
 }());
@@ -706,20 +719,22 @@ var ItemsListComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ItemModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__ = __webpack_require__("../../../../angularfire2/database/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_shared_module__ = __webpack_require__("../../../../../src/app/shared/shared.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__item_service__ = __webpack_require__("../../../../../src/app/items/shared/item.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__items_list_items_list_component__ = __webpack_require__("../../../../../src/app/items/items-list/items-list.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__item_form_item_form_component__ = __webpack_require__("../../../../../src/app/items/item-form/item-form.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__item_detail_item_detail_component__ = __webpack_require__("../../../../../src/app/items/item-detail/item-detail.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__("../../../common/esm5/http.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_common__ = __webpack_require__("../../../common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__("../../../forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__ = __webpack_require__("../../../../angularfire2/database/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__shared_shared_module__ = __webpack_require__("../../../../../src/app/shared/shared.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__item_service__ = __webpack_require__("../../../../../src/app/items/shared/item.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__items_list_items_list_component__ = __webpack_require__("../../../../../src/app/items/items-list/items-list.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__item_form_item_form_component__ = __webpack_require__("../../../../../src/app/items/item-form/item-form.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__item_detail_item_detail_component__ = __webpack_require__("../../../../../src/app/items/item-detail/item-detail.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -735,19 +750,20 @@ var ItemModule = (function () {
     ItemModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
-                __WEBPACK_IMPORTED_MODULE_4__shared_shared_module__["a" /* SharedModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["c" /* ReactiveFormsModule */],
-                __WEBPACK_IMPORTED_MODULE_2__angular_forms__["b" /* FormsModule */],
-                __WEBPACK_IMPORTED_MODULE_3_angularfire2_database__["b" /* AngularFireDatabaseModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_common__["b" /* CommonModule */],
+                __WEBPACK_IMPORTED_MODULE_5__shared_shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_forms__["c" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_4_angularfire2_database__["b" /* AngularFireDatabaseModule */],
+                __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["b" /* HttpClientModule */],
             ],
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_6__items_list_items_list_component__["a" /* ItemsListComponent */],
-                __WEBPACK_IMPORTED_MODULE_7__item_form_item_form_component__["a" /* ItemFormComponent */],
-                __WEBPACK_IMPORTED_MODULE_8__item_detail_item_detail_component__["a" /* ItemDetailComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__items_list_items_list_component__["a" /* ItemsListComponent */],
+                __WEBPACK_IMPORTED_MODULE_8__item_form_item_form_component__["a" /* ItemFormComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__item_detail_item_detail_component__["a" /* ItemDetailComponent */],
             ],
             providers: [
-                __WEBPACK_IMPORTED_MODULE_5__item_service__["a" /* ItemService */],
+                __WEBPACK_IMPORTED_MODULE_6__item_service__["a" /* ItemService */],
             ],
         })
     ], ItemModule);
